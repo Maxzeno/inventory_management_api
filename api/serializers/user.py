@@ -1,10 +1,10 @@
 from rest_framework import serializers
-from api import models
+from api import models 
         
 
 class EmployeeProfileSerializer(serializers.ModelSerializer):    
     class Meta:
-        model = models.EmployeeProfile
+        model = models.user.EmployeeProfile
         exclude = ('user',)
 
 
@@ -12,7 +12,7 @@ class UserSerializer(serializers.ModelSerializer):
     employee = EmployeeProfileSerializer(many=False)
     class Meta:
         depth = 2
-        model = models.User
+        model = models.user.User
         exclude = ('groups', 'user_permissions', 'last_login')
         extra_kwargs = {
             'email': {'read_only': True},

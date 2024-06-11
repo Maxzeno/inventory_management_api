@@ -1,0 +1,11 @@
+SECRET_KEY=mdmfdmfd^kdkdfdfk@gd&+a@fdemfd*tfix^67g^e%8uv0yhhj!sqzc()$=kkrkrr
+DEBUG=true
+TRY_LOCAL_DB=true
+ALLOWED_HOST=domain1.com domain2.com
+FRONTEND_BASE_URL=inventoryapp.com
+DATABASES_DEFAULT_ENGINE=django.db.backends.postgresql
+DATABASES_DEFAULT_NAME=inventorydb
+DATABASES_DEFAULT_HOST=ep-divine-bird.ap-southeast-1.aws.neon.tech
+DATABASES_DEFAULT_PORT=5432
+DATABASES_DEFAULT_USER=default
+DATABASES_DEFAULT_PASSWORD=ZGU3DyahVlO2

@@ -9,6 +9,7 @@ from rest_framework.response import Response
 from api import serializers
 from rest_framework.permissions import IsAuthenticated
 
+
 @extend_schema(tags=['Auth'])
 class MyTokenObtainPairView(TokenObtainPairView):
     def post(self, request, *args, **kwargs):
