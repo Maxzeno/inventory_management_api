@@ -9,6 +9,22 @@ class User(AbstractUser):
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["username"]
     
+        
+    def save(self, *args, **kwargs):
+        # Ensure that the password is set correctly
+        if not self.pk:  # Check if the user instance is being created
+            self.set_password(self.password)
+        else:  # Check if the user instance is being updated
+            old_user = self.__class__.objects.get(pk=self.pk)
+            if self.password != old_user.password:
+                self.set_password(self.password)
+
+        # Ensure that a superuser is always staff
+        if self.is_superuser and not self.is_staff:
+            self.is_staff = True
+
+        super().save(*args, **kwargs)
+    
 
 class EmployeeProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='employee')

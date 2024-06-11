@@ -13,9 +13,13 @@ class MyAPIException(APIException):
 
 
 class MyPerm(BasePermission):
-    def check_basic_perm(self, request, view):
+    def check_basic_perm(self, request, view):  
         if not request.user or not request.user.is_authenticated:
             return {'detail': 'user is not authenticated', 'code': 401}
+        
+        if not hasattr(request.user, "employee") or request.user.employee is None:
+            return {'detail': 'user employee profile not set', 'code': 403}
+            
         return None
 
     def has_permission(self, request, view):
