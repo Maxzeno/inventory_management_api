@@ -1,16 +1,17 @@
 from django.urls import path, include
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 from rest_framework import routers
-from .views import auth
+from api import views
 
 router = routers.DefaultRouter()
 
 urlpatterns = [
     path('', include(router.urls)),
     
-    path('token/', auth.MyTokenObtainSlidingView.as_view(), name='token_obtain'),
-    path('token/refresh/', auth.MyTokenRefreshSlidingView.as_view(), name='token_refresh'),
-    path('api/token/blacklist/', auth.MyTokenBlacklistView.as_view(), name='token_blacklist'),
+    path('token/', views.auth.MyTokenObtainPairView.as_view(), name='token_obtain'),
+    path('token/refresh/', views.auth.MyTokenRefreshView.as_view(), name='token_refresh'),
+    path('token/user/', views.auth.UserView.as_view(), name='user'),
+    path('token/blacklist/', views.auth.MyTokenBlacklistView.as_view(), name='token_blacklist'),
     
     # API docs
     path('docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
