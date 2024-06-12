@@ -20,3 +20,14 @@ class UserSerializer(serializers.ModelSerializer):
             'date_joined': {'read_only': True},
             'password': {'write_only': True},
         }
+
+
+class UserUpdateSerializer(serializers.Serializer):    
+    first_name = serializers.CharField(required=False)
+    last_name = serializers.CharField(required=False)
+    position = serializers.CharField(required=False)
+    department = serializers.CharField(required=False)
+    phone_number = serializers.CharField(required=False)
+
+    def validate(self, attrs):
+        return attrs

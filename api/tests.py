@@ -42,3 +42,21 @@ class InventoryTests(APITestCase):
         response = self.client.get(f'/api/v1/suppliers/{supplier.id}/')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data['name'], "Supplier1")
+
+
+class UserTests(APITestCase):
+    def setUp(self):
+        self.user = models.user.User.objects.create_user(email='testuser@test.com', username='testuser', password='testpassword')
+        refresh = RefreshToken.for_user(self.user)
+        self.access_token = str(refresh.access_token)
+        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {self.access_token}')
+
+    def test_user_auth(self):
+        response = self.client.get('/api/v1/user/')
+        self.assertEqual(response.status_code, 200)
+        
+        self.assertEqual(response.data['employee'], None)
+        
+        models.user.EmployeeProfile.objects.create(user=self.user)
+        response = self.client.get('/api/v1/user/')
+        self.assertNotEqual(response.data['employee'], None)
