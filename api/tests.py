@@ -4,16 +4,11 @@ from api import models
 
 class InventoryTests(APITestCase):
     def setUp(self):
-        # Create a user
         self.user = models.user.User.objects.create_user(email='testuser@test.com', username='testuser', password='testpassword')
         models.user.EmployeeProfile.objects.create(user=self.user)
-        
-        # Obtain token
         refresh = RefreshToken.for_user(self.user)
         self.access_token = str(refresh.access_token)
-
-        # Set up the authorization header
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.access_token)
+        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {self.access_token}')
 
     def test_create_item(self):
         supplier = models.inventory.Supplier.objects.create(name="Supplier1", contact_information="Contact info")
@@ -30,5 +25,19 @@ class InventoryTests(APITestCase):
             'name': 'Supplier1',
             'contact_information': 'Contact info'
         }, format='json')
-        
         self.assertEqual(response.status_code, 201)
+
+    def test_get_item(self):
+        supplier = models.inventory.Supplier.objects.create(name="Supplier1", contact_information="Contact info")
+        item = models.inventory.Item.objects.create(name="Item1", description="Item description", price=9.99)
+        item.suppliers.add(supplier)
+        response = self.client.get(f'/api/v1/items/{item.id}/')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data['name'], "Item1")
+        self.assertEqual(response.data['suppliers'][0]['name'], "Supplier1")
+
+    def test_get_supplier(self):
+        supplier = models.inventory.Supplier.objects.create(name="Supplier1", contact_information="Contact info")
+        response = self.client.get(f'/api/v1/suppliers/{supplier.id}/')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data['name'], "Supplier1")

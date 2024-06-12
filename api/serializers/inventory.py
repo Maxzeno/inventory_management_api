@@ -11,8 +11,6 @@ class SupplierSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'contact_information']
         
     def validate(self, attrs):
-        print('validate', attrs)
-        
         if not attrs.get('name'):
             raise MyAPIException(detail="Name is required", code=400)
         
@@ -52,8 +50,6 @@ class ItemSerializer(serializers.ModelSerializer):
         
         
     def validate(self, attrs):
-        print('validate', attrs)
-        
         if not attrs.get('name'):
             raise MyAPIException(detail="Name is required", code=400)
         
