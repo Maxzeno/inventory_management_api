@@ -30,7 +30,7 @@ DEBUG = config('DEBUG', default=False, cast=bool)
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 # config('ALLOWED_HOST') should contain list of space separated hosts 
-_ALLOWED_HOST = config('ALLOWED_HOST')
+_ALLOWED_HOST = config('ALLOWED_HOST', default="")
 if _ALLOWED_HOST:
     ALLOWED_HOSTS.extend(_ALLOWED_HOST.split())
 
@@ -211,7 +211,7 @@ CORS_ALLOWED_ORIGINS = [
     "https://127.0.0.1:3000",
 ]
 
-FRONTEND_BASE_URL = config('FRONTEND_BASE_URL')
+FRONTEND_BASE_URL = config('FRONTEND_BASE_URL', default="")
 
 if FRONTEND_BASE_URL:
     CORS_ALLOWED_ORIGINS.append(f'http://{FRONTEND_BASE_URL}')
