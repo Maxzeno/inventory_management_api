@@ -4,7 +4,6 @@ from rest_framework import views
 from rest_framework.response import Response
 from api import serializers
 from api import models
-from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework import status
 
@@ -50,16 +49,6 @@ class MyTokenRefreshView(views.APIView):
             return Response({'detail': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
         return Response({'access_token': access_token}, status=status.HTTP_200_OK)
-
-
-@extend_schema(tags=['Auth'], responses=serializers.user.UserSerializer)
-class UserView(views.APIView):
-    permission_classes = [IsAuthenticated]
-    
-    def get(self, request):
-        serializer = serializers.user.UserSerializer(request.user)
-        data = serializer.data
-        return Response(data)
 
 
 @extend_schema(tags=['Auth'], responses=serializers.auth.MessageSerializer, request=serializers.auth.RefreshTokenSerializer, auth=None)
