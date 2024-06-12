@@ -16,7 +16,7 @@ class InventoryTests(APITestCase):
             'name': 'Item1',
             'description': 'Item description',
             'price': '9.99',
-            'supplier_ids': [supplier.id]
+            'supplier_ids': [str(supplier.id)]
         }, format='json')
         self.assertEqual(response.status_code, 201)
 
