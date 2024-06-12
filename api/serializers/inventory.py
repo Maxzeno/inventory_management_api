@@ -11,24 +11,28 @@ class SupplierSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'contact_information']
         
     def validate(self, attrs):
-        if not attrs.get('name'):
-            raise MyAPIException(detail="Name is required", code=400)
-        
-        if not attrs.get('contact_information'):
-            raise MyAPIException(detail="Contact information is required", code=400)
-        
+        if self.context['request'].method in ['POST', 'PUT']:
+            if not attrs.get('name'):
+                raise MyAPIException(detail="Name is required", code=400)
+            
+            if not attrs.get('contact_information'):
+                raise MyAPIException(detail="Contact information is required", code=400)
+            
         return attrs
 
 
 class SupplierIDsField(serializers.ListField):
-    child = serializers.IntegerField()
+    child = serializers.IntegerField(required=False)
 
     def to_representation(self, value):
         return [supplier.id for supplier in value]
 
     def to_internal_value(self, data):
         try:
-            return [models.inventory.Supplier.objects.get(id=id) for id in data]
+            if not data:
+                raise MyAPIException(detail="Suppliers not specified", code=400)
+                
+            return [models.inventory.Supplier.objects.get(id=id) for id in data[0].split(',')]
         except models.inventory.Supplier.DoesNotExist:
             raise MyAPIException(detail="Supplier not found", code=404)
 
@@ -50,15 +54,16 @@ class ItemSerializer(serializers.ModelSerializer):
         
         
     def validate(self, attrs):
-        if not attrs.get('name'):
-            raise MyAPIException(detail="Name is required", code=400)
-        
-        if not attrs.get('description'):
-            raise MyAPIException(detail="Description is required", code=400)
-        
-        if not attrs.get('price'):
-            raise MyAPIException(detail="Price is required", code=400)
-        
+        if self.context['request'].method in ['POST', 'PUT']:
+            if not attrs.get('name'):
+                raise MyAPIException(detail="Name is required", code=400)
+            
+            if not attrs.get('description'):
+                raise MyAPIException(detail="Description is required", code=400)
+            
+            if not attrs.get('price'):
+                raise MyAPIException(detail="Price is required", code=400)
+            
         return attrs
 
     def create(self, validated_data):
