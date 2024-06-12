@@ -35,7 +35,9 @@ class SupplierIDsField(serializers.ListField):
             return [models.inventory.Supplier.objects.get(id=id) for id in data[0].split(',')]
         except models.inventory.Supplier.DoesNotExist:
             raise MyAPIException(detail="Supplier not found", code=404)
-
+        except:
+            raise MyAPIException(detail="Supplier format invalid", code=400)
+            
 
 class ItemSerializer(serializers.ModelSerializer):
     name = serializers.CharField(required=False)
@@ -51,7 +53,6 @@ class ItemSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'suppliers': {'read_only': True},
         }
-        
         
     def validate(self, attrs):
         if self.context['request'].method in ['POST', 'PUT']:

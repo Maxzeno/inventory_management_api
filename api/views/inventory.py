@@ -1,4 +1,4 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, mixins
 from api import serializers
 from api import models
 from drf_spectacular.utils import extend_schema
@@ -9,7 +9,11 @@ from api.utils.filters import ItemFilter
 
 
 @extend_schema(tags=['Suppliers'])
-class SupplierViewSet(viewsets.ModelViewSet):
+class SupplierViewSet(mixins.CreateModelMixin,
+                   mixins.RetrieveModelMixin,
+                   mixins.UpdateModelMixin,
+                   mixins.ListModelMixin,
+                   viewsets.GenericViewSet):
     queryset = models.inventory.Supplier.objects.all()
     serializer_class = serializers.inventory.SupplierSerializer        
 
@@ -21,7 +25,7 @@ class ItemViewSet(viewsets.ModelViewSet):
     filterset_class = ItemFilter
     
     def get_queryset(self):
-        supplier_id = self.request.query_params.get('suppliers', None)
+        supplier_id = self.request.query_params.get('supplier', None)
 
         if supplier_id:
             try:

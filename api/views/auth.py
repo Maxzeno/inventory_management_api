@@ -20,7 +20,6 @@ class MyTokenObtainPairView(views.APIView):
 
         user = get_object_or_404(models.user.User, email=serializer.validated_data.get('email'))
 
-        # Assuming you have a method to check the password
         if not user.check_password(serializer.validated_data.get('password')):
             return Response({'detail': 'Invalid credentials'}, status=400)
 
@@ -44,9 +43,6 @@ class MyTokenRefreshView(views.APIView):
         
         refresh_token = serializer.validated_data.get('refresh_token')
 
-        if not refresh_token:
-            return Response({'detail': 'Refresh token is required'}, status=status.HTTP_400_BAD_REQUEST)
-
         try:
             token = RefreshToken(refresh_token)
             access_token = str(token.access_token)
@@ -63,7 +59,6 @@ class UserView(views.APIView):
     def get(self, request):
         serializer = serializers.user.UserSerializer(request.user)
         data = serializer.data
-        data['token'] = request.META.get('HTTP_AUTHORIZATION', '').split()[-1]
         return Response(data)
 
 
@@ -73,14 +68,10 @@ class MyTokenBlacklistView(views.APIView):
     permission_classes = []
     
     def post(self, request, *args, **kwargs):
-    
         serializer = serializers.auth.RefreshTokenSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         
         refresh_token = serializer.validated_data.get('refresh_token')
-
-        if not refresh_token:
-            return Response({'detail': 'Refresh token is required'}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
             token = RefreshToken(refresh_token)
@@ -89,3 +80,4 @@ class MyTokenBlacklistView(views.APIView):
             return Response({'detail': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
         return Response({'detail': 'Token blacklisted successfully'}, status=status.HTTP_200_OK)
+    

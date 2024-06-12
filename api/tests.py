@@ -2,6 +2,7 @@ from rest_framework.test import APITestCase
 from rest_framework_simplejwt.tokens import RefreshToken
 from api import models
 
+
 class InventoryTests(APITestCase):
     def setUp(self):
         self.user = models.user.User.objects.create_user(email='testuser@test.com', username='testuser', password='testpassword')

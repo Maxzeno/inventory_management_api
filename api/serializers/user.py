@@ -13,11 +13,9 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         depth = 2
         model = models.user.User
-        exclude = ('groups', 'user_permissions', 'last_login')
+        exclude = ('groups', 'user_permissions', 'last_login', 'is_superuser', 'is_staff')
         extra_kwargs = {
             'email': {'read_only': True},
-            'is_staff': {'read_only': True},
-            'is_superuser': {'read_only': True},
             'is_active': {'read_only': True},
             'date_joined': {'read_only': True},
             'password': {'write_only': True},
