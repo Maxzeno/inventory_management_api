@@ -28,9 +28,9 @@ class User(AbstractUser):
 
 class EmployeeProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='employee')
-    position = models.CharField(max_length=100)
-    department = models.CharField(max_length=100)
-    phone_number = models.CharField(max_length=15)
+    position = models.CharField(max_length=100, null=True, blank=True)
+    department = models.CharField(max_length=100, null=True, blank=True)
+    phone_number = models.CharField(max_length=15, null=True, blank=True)
     
     def __str__(self):
         return self.user.username
