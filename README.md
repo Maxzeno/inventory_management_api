@@ -42,15 +42,35 @@
     python manage.py migrate
     ```
 
-4. **Run the development server**:
+4. **Collect static (required if debug with be set to false)**:
+    ```bash
+    python manage.py collectstatic
+    ```
+
+5. **Create Superuser so you can login to the dashboard**:
+    ```bash
+    python manage.py createsuperuser
+    ```
+
+6. **Run the server**:
     ```bash
     python manage.py runserver
     ```
 
+7. **Add employee profile to a user from the django admin dashboard**:
+    - When logged into the django admin dashboard at `/admin` 
+    - Click on Employee profiles 
+    - Then click on add Employee profiles 
+    - Then select a user from the dropdown 
+    - After filling all fields save
+    #### Reason for this is I added a check in MyPerm that will not let a user access specific endpoints unless they add an employee profile
+    
+
+
 
 ## API usage
 
-### Swagger endpoint with api documentation /api/v1/docs/
+### Swagger documentation for the API /api/v1/docs/
 
 ### Endpoints
 

@@ -3,7 +3,10 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, Spec
 from rest_framework import routers
 from api import views
 
+
 router = routers.DefaultRouter()
+router.register('suppliers', views.inventory.SupplierViewSet, basename='suppliers')
+router.register('items', views.inventory.ItemViewSet, basename='items')
 
 urlpatterns = [
     path('', include(router.urls)),
