@@ -16,11 +16,7 @@ class SupplierViewSet(mixins.CreateModelMixin,
     serializer_class = serializers.inventory.SupplierSerializer        
 
         
-@extend_schema(tags=['Items'], parameters=[
-            OpenApiParameter(
-                "supplier",
-                type={"type": "integer"},
-            )])
+@extend_schema(tags=['Items'])
 class ItemViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.inventory.ItemSerializer
     
@@ -36,3 +32,18 @@ class ItemViewSet(viewsets.ModelViewSet):
         else:
             queryset = models.inventory.Item.objects.all().order_by('-date_added')
         return queryset
+    
+    
+    @extend_schema(
+        tags=['Items'],
+        parameters=[
+            OpenApiParameter(
+                "supplier",
+                type={"type": "integer"},
+                location=OpenApiParameter.QUERY,
+                description="Filter items by supplier ID"
+            )
+        ]
+    )
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
